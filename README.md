@@ -6,3 +6,4 @@ This is a sample of micro frontend app that is working with reverse proxy.
 ```
 docker-compose up --build
 ```
+after that go to http://localhost:8000/

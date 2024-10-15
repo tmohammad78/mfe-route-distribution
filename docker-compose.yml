@@ -1,0 +1,26 @@
+services:
+  container:
+    build: container
+    networks:
+      - mfe
+    ports:
+      - "8000:8000"
+    depends_on:
+      - posts
+      - blog
+  posts:
+    hostname: posts_hostname
+    build: posts
+    networks:
+      - mfe
+    ports:
+      - "8081:8081"
+  blog: 
+      hostname: blog_hostname
+      build: blog
+      networks:
+        - mfe
+      ports:
+        - "8082:8082"
+networks:
+  mfe:
