@@ -19,12 +19,10 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf *
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY nginx/error /usr/share/nginx/html
-COPY nginx/conf/mime.types /etc/nginx/mime.types
 
 COPY --from=builder /app/build .
-COPY --from=builder /app/build /usr/share/nginx/html/container
+COPY --from=builder /app/build /usr/share/nginx/html/store
 
-EXPOSE 8000
+EXPOSE 8083
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

@@ -22,5 +22,12 @@ services:
         - mfe
       ports:
         - "8082:8082"
+  store: 
+      hostname: store_hostname
+      build: store
+      networks:
+        - mfe
+      ports:
+        - "8083:8083"
 networks:
   mfe:
