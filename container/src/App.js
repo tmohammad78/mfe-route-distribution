@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 function App() {
@@ -6,8 +6,7 @@ function App() {
   const [renderApp,setRenderApp] = useState(null)
   const navigate = useNavigate()
   const [isNotHome,setIsHome] = useState(false)
-
-
+  const [numberProducts,setNumberProducts] = useState(0)
 
   function loadPage(page) {
     if(page === '/') {
@@ -16,6 +15,27 @@ function App() {
     navigate(page)
     setRenderApp(page)
   }
+
+  // const handleUpdateCart = useCallback((event) => {
+  //   console.log(event,' this is event')
+  //   setNumberProducts((currentCount) => currentCount);
+  // }, [])
+
+  window.addEventListener('add_to_cart', (event) => {
+    console.log(event,' this is event')
+    setNumberProducts((currentCount) => currentCount);
+  });
+
+
+  // useEffect(() => {  
+  //   console.log("Scdscdsc")
+
+  //   return () => {
+  //     window.removeEventListener('add_to_cart', handleUpdateCart)
+  //   }
+  // }, [handleUpdateCart]);
+
+
 
   return (
       <div className="">
@@ -46,6 +66,12 @@ function App() {
               </button>
             </li>
           </ul>
+        {numberProducts > 0 && (
+          <div> 
+              This is total of product:
+              {numberProducts}
+          </div>
+        )}
         </nav>
         {isNotHome && (
           <iframe 

@@ -10,6 +10,10 @@ export const CartProvider = ({ children }) => {
     setCart((prevCart) => [...prevCart, product]);
 
     showToast(`${product.name} added to cart!`);
+
+    const addToCartEvent = new CustomEvent('add_to_cart', { cart: { count: getTotalItems() } });
+
+    window.dispatchEvent(addToCartEvent);
   };
 
   const showToast = (message) => {
