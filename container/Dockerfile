@@ -21,6 +21,7 @@ RUN rm -rf *
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/error /usr/share/nginx/html
 COPY nginx/conf/mime.types /etc/nginx/mime.types
+COPY src/shared/sharedWorker.js /usr/share/nginx/html/sharedWorker.js
 
 COPY --from=builder /app/build .
 COPY --from=builder /app/build /usr/share/nginx/html/container

@@ -1,14 +1,15 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  const worker = new SharedWorker('http://localhost:8000/sharedWorker.js');
+
   const [cart, setCart] = useState([]);
   const [toast, setToast] = useState({ message: '', visible: false });
 
   const addToCart = (product) => {
     setCart((prevCart) => [...prevCart, product]);
-
     showToast(`${product.name} added to cart!`);
   };
 
@@ -18,6 +19,17 @@ export const CartProvider = ({ children }) => {
       setToast({ message: '', visible: false });
     }, 5000);
   };
+  
+
+  useEffect(() => {
+    worker.port.postMessage({ 
+      type: 'publish', 
+      event: 'cartUpdated', 
+      data: {
+        count: cart.length
+      } 
+    });
+  }, [cart,worker.port]);
 
 
   const getTotalItems = () => {
