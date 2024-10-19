@@ -7,7 +7,6 @@ import ProductPage from "./pages/products";
 import Product from "./pages/product";
 import { CartProvider, useCart } from "./context/CartContext";
 
-
 const CartStatus = () => {
   const { getTotalItems } = useCart();
   return (
@@ -19,7 +18,6 @@ const CartStatus = () => {
 
 function App() {
   let defaultPath = process.env.PUBLIC_URL
-
 
   const handleClick = () => {
     const pub = window.eventMFE 

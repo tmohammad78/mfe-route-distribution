@@ -9,6 +9,17 @@ import Post from "./pages/post";
 function App() {
   let defaultPath = process.env.PUBLIC_URL
 
+  const worker = new SharedWorker('http://localhost:8000/sharedWorker.js');
+
+
+  worker.port.postMessage({ 
+    type: 'publish', 
+    event: 'test', 
+    data: {
+      test: "blog"
+    } 
+  });
+
   return (
       <div className="mx-20">
         <div>
