@@ -11,6 +11,7 @@ function App() {
 
   const worker = new SharedWorker('http://localhost:8000/sharedWorker.js');
 
+  worker.port.postMessage({ type: 'setAuth' , data: { token: "TSDSD"} });
 
   worker.port.postMessage({ 
     type: 'publish', 

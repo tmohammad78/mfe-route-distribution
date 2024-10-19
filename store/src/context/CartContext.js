@@ -20,8 +20,12 @@ export const CartProvider = ({ children }) => {
     }, 5000);
   };
   
-
   useEffect(() => {
+    worker.port.start();
+
+    worker.port.postMessage({ type: 'setCartTotal' , data: cart.length });
+
+
     worker.port.postMessage({ 
       type: 'publish', 
       event: 'cartUpdated', 
@@ -29,6 +33,15 @@ export const CartProvider = ({ children }) => {
         count: cart.length
       } 
     });
+
+    // worker.port.onmessage = (event) => {
+    //   console.log('Result from worker:', event);
+    // };
+
+    return () => {
+      worker.port.close();
+    };
+
   }, [cart,worker.port]);
 
 
