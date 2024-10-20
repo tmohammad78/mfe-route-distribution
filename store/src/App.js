@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useEffect} from "react"
 import {
   Routes,
   Route,
@@ -20,25 +20,14 @@ const CartStatus = () => {
 function App() {
   let defaultPath = process.env.PUBLIC_URL
 
-
-  const handleClick = () => {
-    const pub = window.eventMFE 
-    console.log(pub,' this is store')
-    document.addEventListener("data", listener);
-  }
-
-  const listener = useCallback((data) => {
-      console.log(data,' this is data in store')
-  }, [])
-
   useEffect(() => {
-    console.log('this is store')
-    window.addEventListener("data", listener);
-
+    const event = new CustomEvent('mount', {  detail: { product: "store", isLoaded: true } });
+    window.parent.dispatchEvent(event);
     return () => {
-      window.removeEventListener("data",listener);
+      const event = new CustomEvent('unmount', {  detail: { product: "store", isLoaded: false } });
+      window.parent.dispatchEvent(event);
     };
-  }, [listener]);
+  }, [])
 
   return (
       <div className="mx-20">
@@ -52,7 +41,6 @@ function App() {
             <Route path={defaultPath + "/:id"} element={<Product />} />
           </Routes>
         </CartProvider>
-        <button onClick={handleClick}>get data</button>
       </div>
   );
 }

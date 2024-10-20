@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
@@ -11,9 +11,7 @@ export const CartProvider = ({ children }) => {
 
     showToast(`${product.name} added to cart!`);
 
-    const addToCartEvent = new CustomEvent('add_to_cart', { cart: { count: getTotalItems() } });
 
-    window.dispatchEvent(addToCartEvent);
   };
 
   const showToast = (message) => {
@@ -23,6 +21,12 @@ export const CartProvider = ({ children }) => {
     }, 5000);
   };
 
+  useEffect(() => {
+    const addToCartEvent = new CustomEvent('add_to_cart', { detail: { product: "store", itemTotal: cart.length}});
+
+    window.parent.dispatchEvent(addToCartEvent);
+    
+  }, [cart])
 
   const getTotalItems = () => {
     return cart.length;

@@ -1,4 +1,4 @@
-import React from "react"
+import React , { useEffect } from "react"
 import {
   Routes,
   Route,
@@ -8,6 +8,15 @@ import Post from "./pages/post";
 
 function App() {
   let defaultPath = process.env.PUBLIC_URL
+
+  useEffect(() => {
+    const event = new CustomEvent('mount', {  detail: { product: "blog", isLoaded: true } });
+    window.parent.dispatchEvent(event);
+    return () => {
+      const event = new CustomEvent('unmount', {  detail: { product: "blog", isLoaded: false } });
+      window.parent.dispatchEvent(event);
+    };
+  }, [])
 
   return (
       <div className="mx-20">
