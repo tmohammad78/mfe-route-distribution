@@ -1,60 +1,62 @@
-class PubSub {
+class UserManager {
   constructor() {
-    this.subscribers = new Map();
+    this.auth = null;
+    this.userData = {};
+    this.message = {};
+    this.cartTotal = 0;
   }
 
-  publish(event, data) {
-    if (this.subscribers.has(event)) {
-      this.subscribers.get(event).forEach((callback) => callback(data));
+  setAuth(authData) {
+    this.auth = authData;
+    this.message = {
+      type: "success",
+      message: "Data is update"
     }
   }
 
-  subscribe(event, callback) {
-    if (!this.subscribers.has(event)) {
-      this.subscribers.set(event, []);
+  getAuth() {
+    return this.auth;
+  }
+
+  setUserData(data) {
+    this.userData = { ...this.userData, ...data };
+  }
+
+  getUserData() {
+    return this.userData;
+  }
+
+  setCartTotal(total) {
+    console.log(total,'ddddd total')
+    this.cartTotal = total;
+    this.message = {
+      type: "success",
+      message: "item is added"
     }
-    this.subscribers.get(event).push(callback);
+  }
+
+  getCartTotal() {
+    return this.cartTotal
   }
 }
 
-const pubSub = new PubSub();
-  
-let ports = [];
+const userManager = new UserManager();
 
-self.onconnect = (event) => {
-  const port = event.ports[0];
-  ports.push(port);
+self.onmessage = function (e) {
+  const workerData = e.data;
+  postMessage("[WORKER] Web worker onmessage established");
+  switch (workerData.connectionStatus) {
+    case "init":
+      console.log("This is init one")
+      // socketInstance = userManager();
+      // socketManagement();
+      break;
 
-  port.onmessage = (e) => {
-    const { type, event: eventName, data } = e.data;
+    case "stop":
+      // socketInstance.close();
+      break;
 
-    if (type === 'publish' && eventName === 'cartUpdated') {
-      publishCartUpdate(data);
-    }
-  };
-};
-
-const publishCartUpdate = (data) => {
-  for (const port of ports) {
-    port.postMessage({
-      type: 'subscribe',
-      event: 'cartUpdated',
-      data,
-    });
+    default:
+      postMessage("dadaddda")
   }
-};
-
-
-self.addEventListener('message', (e) => {
-  const { type, event, data } = e.data;
-  if (type === 'publish') {
-    pubSub.publish(event, data);
-  }
-});
-
-// Example to log to console when subscribed
-pubSub.subscribe('cartUpdated', (data) => {
-  console.log('Cart updated with data:', data);
-});
-
-  
+}

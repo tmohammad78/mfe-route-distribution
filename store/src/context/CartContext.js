@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const worker = new SharedWorker('http://localhost:8000/sharedWorker.js');
+  const [worker, setWorker] = useState(null);
 
   const [cart, setCart] = useState([]);
   const [toast, setToast] = useState({ message: '', visible: false });
@@ -22,14 +22,26 @@ export const CartProvider = ({ children }) => {
   
 
   useEffect(() => {
-    worker.port.postMessage({ 
-      type: 'publish', 
-      event: 'cartUpdated', 
-      data: {
-        count: cart.length
-      } 
-    });
-  }, [cart,worker.port]);
+    const myWorker = new Worker("http://localhost:8000/sharedWorker.js");
+    console.log(myWorker,'myWorker myWorker this is worker');
+    setWorker(myWorker);
+
+    return () => {
+      myWorker.terminate();
+    };
+  }, []);
+
+  useEffect(() => {
+    if(worker) { 
+      console.log(worker,'this is worker');
+      
+      worker.postMessage({
+        data: {
+          items: cart.length
+        }
+      });
+    }
+  }, [cart])
 
 
   const getTotalItems = () => {
