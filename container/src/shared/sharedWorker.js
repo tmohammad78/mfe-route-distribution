@@ -17,6 +17,7 @@ class PubSub {
   }
 }
 
+// for instance, you use a class then use it in your blog
 const pubSub = new PubSub();
   
 let ports = [];
@@ -50,11 +51,6 @@ self.addEventListener('message', (e) => {
   if (type === 'publish') {
     pubSub.publish(event, data);
   }
-});
-
-// Example to log to console when subscribed
-pubSub.subscribe('cartUpdated', (data) => {
-  console.log('Cart updated with data:', data);
 });
 
   
